@@ -1,74 +1,74 @@
 		<?php
-		$this->Widget->clear();
-		$this->Widget->setLinkButtons(array());
-		$this->Widget->create($this->_("Nocprovisioning.add_row.box_title", true));
-		?>
+        $this->Widget->clear();
+        $this->Widget->setLinkButtons([]);
+        $this->Widget->create($this->_('Nocprovisioning.add_row.box_title', true));
+        ?>
 		<div class="inner">
 			<?php
-			$this->Form->create();
-			$this->Form->fieldHidden("account_count", $this->Html->ifSet($vars->account_count, 0));
-			?>
+            $this->Form->create();
+            $this->Form->fieldHidden('account_count', $this->Html->ifSet($vars->account_count, 0));
+            ?>
 			<div class="title_row first">
-				<h3><?php $this->_("Nocprovisioning.add_row.basic_title");?></h3>
+				<h3><?php $this->_('Nocprovisioning.add_row.basic_title'); ?></h3>
 			</div>
 			<div class="pad">
 				<ul>
 					<li>
 						<?php
-						$this->Form->label($this->_("Nocprovisioning.row_meta.server_name", true), "server_name");
-						$this->Form->fieldText("server_name", $this->Html->ifSet($vars->server_name));
-						?>
+                        $this->Form->label($this->_('Nocprovisioning.row_meta.server_name', true), 'server_name');
+                        $this->Form->fieldText('server_name', $this->Html->ifSet($vars->server_name));
+                        ?>
 					</li>
 					<li>
 						<?php
-						$this->Form->label($this->_("Nocprovisioning.row_meta.host_name", true), "host_name");
-						$this->Form->fieldText("host_name", $this->Html->ifSet($vars->host_name));
-						?>
+                        $this->Form->label($this->_('Nocprovisioning.row_meta.host_name', true), 'host_name');
+                        $this->Form->fieldText('host_name', $this->Html->ifSet($vars->host_name));
+                        ?>
 					</li>
 					<li>
 						<?php
-						$this->Form->label($this->_("Nocprovisioning.row_meta.user_name", true), "user_name");
-						$this->Form->fieldText("user_name", $this->Html->ifSet($vars->user_name));
-						?>
+                        $this->Form->label($this->_('Nocprovisioning.row_meta.user_name', true), 'user_name');
+                        $this->Form->fieldText('user_name', $this->Html->ifSet($vars->user_name));
+                        ?>
 					</li>
 					<li>
 						<?php
-						$this->Form->label($this->_("Nocprovisioning.row_meta.password", true), "password");
-						$this->Form->fieldPassword("password", $this->Html->ifSet($vars->password));
-						?>
+                        $this->Form->label($this->_('Nocprovisioning.row_meta.password', true), 'password');
+                        $this->Form->fieldPassword('password', $this->Html->ifSet($vars->password));
+                        ?>
 					</li>
 					<li>
 						<?php
-						$this->Form->fieldCheckbox("ssl_verify", "true", $this->Html->ifSet($vars->ssl_verify, "false") == "true", array('id'=>"ssl_verify"));
-						$this->Form->label($this->_("Nocprovisioning.row_meta.ssl_verify", true), "ssl_verify", array('class'=>"inline"));
-						?>
+                        $this->Form->fieldCheckbox('ssl_verify', 'true', $this->Html->ifSet($vars->ssl_verify, 'false') == 'true', ['id'=>'ssl_verify']);
+                        $this->Form->label($this->_('Nocprovisioning.row_meta.ssl_verify', true), 'ssl_verify', ['class'=>'inline']);
+                        ?>
 					</li>
 					<li>
 						<?php
-						$this->Form->fieldCheckbox("create_new_account", "true", $this->Html->ifSet($vars->create_new_account, "true") == "true", array('id'=>"create_new_account"));
-						$this->Form->label($this->_("Nocprovisioning.row_meta.create_new_account", true), "create_new_account", array('class'=>"inline"));
-						?>
+                        $this->Form->fieldCheckbox('create_new_account', 'true', $this->Html->ifSet($vars->create_new_account, 'true') == 'true', ['id'=>'create_new_account']);
+                        $this->Form->label($this->_('Nocprovisioning.row_meta.create_new_account', true), 'create_new_account', ['class'=>'inline']);
+                        ?>
 					</li>
 				</ul>
 			</div>
 				
 			<div class="title_row">
-				<h3><?php $this->_("Nocprovisioning.add_row.notes_title");?></h3>
+				<h3><?php $this->_('Nocprovisioning.add_row.notes_title'); ?></h3>
 			</div>
 			<div class="pad">
 				<ul>
 					<li>
 						<?php
-						$this->Form->fieldTextarea("notes", $this->Html->ifSet($vars->notes));
-						?>
+                        $this->Form->fieldTextarea('notes', $this->Html->ifSet($vars->notes));
+                        ?>
 					</li>
 				</ul>
 			</div>
 			
-			<div class="button_row"><a class="btn_right submit" href="#"><?php $this->_("Nocprovisioning.add_row.add_btn");?></a></div>
+			<div class="button_row"><a class="btn_right submit" href="#"><?php $this->_('Nocprovisioning.add_row.add_btn'); ?></a></div>
 			<?php
-			$this->Form->end();
-			?>
+            $this->Form->end();
+            ?>
 		</div>
 		<?php
-		$this->Widget->end();
+        $this->Widget->end();

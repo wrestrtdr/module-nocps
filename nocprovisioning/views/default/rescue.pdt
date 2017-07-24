@@ -1,0 +1,85 @@
+<?php
+/*
+ * NOC-PS Blesta module
+ * Rescue system form template
+ *
+ * Copyright (C) Maxnet 2010-2015
+ *
+ * May be distributed under the terms of the LGPL license.
+ * In plain English: feel free to use and modify this file to fit your needs,
+ * however do NOT ioncube encode it.
+ * The source code must be available to anyone you distribute this module to.
+ */
+
+$this->Form->create(null, array('name' => 'prov', 'onsubmit' => 'provbutton.disabled=true; return true;'));
+?>
+<div class="inner">
+<div class="heading options space"><h5><?php $this->_('Nocprovisioning.tab_rescue.title');?></h5></div>
+<div class="pad">
+
+<?php
+if (empty($ip) && empty($errormsg)) {
+    echo $this->_('Nocprovisioning.no_server')."</div></div>";
+}
+
+if (!empty($errormsg)) {
+    echo '<p>'.$this->_('Nocprovisioning.error').': '.$errormsg.'</p>';
+}
+
+if (!empty($ip)) {
+?>
+  <input type="hidden" name="nps_nonce" value="<?php echo $nonce; ?>" />
+
+  <table width="100%" cellspacing="10" cellpadding="10">
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.mac');?></td>
+            <td><?php echo $this->Html->safe($mac);?></td>
+          </tr>
+
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.ip');?></td>
+            <td><?php echo $this->Html->safe($ip); ?></td>
+          </tr>
+
+<?php if ($ask_ipmi_password) { ?>
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.ipmipassword');?></td>
+            <td><input type="password" name="ipmipassword" style="width: 350px;"></td>
+          </tr>
+<?php } ?>
+
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.profile');?></td>
+            <td><select name="profile" style="width: 350px;">
+<?php
+    foreach ($profiles as $profile)
+    {
+        echo '<option value="'.$profile['id'].'"';
+        if (!empty($defaultProfile) && $defaultProfile == $profile['id'])
+            echo ' selected';
+        echo '>'.$this->Html->safe($profile['name']).'</option>';
+    }
+?>
+			</select></td>
+          </tr>
+
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.root_password');?></td>
+            <td><input type="password" name="rootpassword" style="width: 350px;" required></td>
+          </tr>
+
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.repeat_root_password');?></td>
+            <td><input type="password" name="rootpassword2" style="width: 350px;" required></td>
+          </tr>
+
+	  <tr>
+		<td>&nbsp;
+		<td><input type="submit" name="provbutton" value="<?php echo $this->_('Nocprovisioning.tab_rescue.rescue_server');?>">
+	  </tr>
+  </table>
+</div></div>
+
+<?php
+    $this->Form->end();
+}

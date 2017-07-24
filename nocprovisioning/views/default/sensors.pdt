@@ -1,0 +1,109 @@
+<?php
+/*
+ * NOC-PS Blesta module
+ * IPMI sensors template
+ *
+ * Copyright (C) Maxnet 2010-2014
+ *
+ * May be distributed under the terms of the LGPL license.
+ * In plain English: feel free to use and modify this file to fit your needs,
+ * however do NOT ioncube encode it.
+ * The source code must be available to anyone you distribute this module to.
+ */
+?>
+
+<div class="inner">
+<div class="heading options space"><h5><?php $this->_('Nocprovisioning.tab_sensors.title'); ?></h5></div>
+<div class="pad">
+
+<?php
+if (!count($sensors))
+{
+    $this->_('Nocprovisioning.tab_sensors.no_sensor_info');
+}
+else
+{
+
+
+foreach ($sensors as $sensor)
+{
+    if ($sensor['status'] != 'ok')
+    {
+        $this->_('Nocprovisioning.tab_sensors.warning_threshold');
+        echo $this->Html->safe($sensor['name']).": ".$this->Html->safe($sensor['status'])."<br>";
+    }
+}
+?>
+
+<div class="pad">
+<?php
+for ($i = 0; $i < count($sensors); $i++)
+    echo '<div id="sgraph'.$i.'" style="float: left; width: 250px; height: 175px;"></div>';
+?>
+</div>
+
+<!--[if lt IE 9]><script type="text/javascript" src="<?php echo $this->Html->safe(VENDORWEBDIR."jqplot/excanvas.min.js");?>"></script><![endif]-->
+<script type="text/javascript" src="<?php echo $this->Html->safe(VENDORWEBDIR."jqplot/jquery.jqplot.min.js");?>"></script>
+<script type="text/javascript" src="<?php echo $this->Html->safe(VENDORWEBDIR."jqplot/plugins/jqplot.meterGaugeRenderer.min.js");?>"></script>
+
+<script type="text/javascript">
+	$(document).blestaSetHeadTag("link", {media:"screen", type:"text/css", rel:"stylesheet", href: "<?php echo $this->Html->safe(VENDORWEBDIR."jqplot/jquery.jqplot.min.css");?>"});
+	
+	$(document).ready(function() {
+<?php
+$sensor_num = 0;
+
+foreach ($sensors as $sensor)
+{
+    echo '$.jqplot("sgraph'.$sensor_num++.'", [['.floatval($sensor['value']).']],{
+       title: "'.$this->Html->safe($sensor['name']).'",
+       seriesDefaults: {
+           renderer: $.jqplot.MeterGaugeRenderer,
+           rendererOptions: {
+               label: "'.$this->Html->safe($sensor['unit']).'",';
+    if ($sensor['low_crit'] != 'na' || $sensor['low_noncrit'] != 'na' || $sensor['up_crit'] != 'na' || $sensor['up_noncrit'] != 'na')
+    {
+        $intervals = array(); $intervalColors = array();
+        if ($sensor['low_crit'] != 'na')
+        {
+            $intervals[] = floatval($sensor['low_crit']);
+            $intervalColors[] = '#cc6666'; /* red */
+        }
+        if ($sensor['low_noncrit'] != 'na')
+        {
+            $intervals[] = floatval($sensor['low_noncrit']);
+            $intervalColors[] = '#e7e658'; /* yellow */
+        }
+        $intervalColors[] = '#66cc66'; /* green */
+        if ($sensor['up_noncrit'] != 'na')
+        {
+            $intervals[] = floatval($sensor['up_noncrit']);
+            $intervalColors[] = '#e7e658'; /* yellow */
+        }
+        if ($sensor['up_crit'] != 'na')
+        {
+            $intervals[] = floatval($sensor['up_crit']);
+            $intervalColors[] = '#cc6666'; /* red */
+        }
+        $intervals[] = $sensor['max'];
+        
+        Loader::loadComponents($this, array("Json"));
+        echo 'intervals: '.$this->Json->encode($intervals).',';
+        echo 'intervalColors: '.$this->Json->encode($intervalColors).',';
+    }
+    echo '     min: '.floatval($sensor['min']).',
+               max: '.floatval($sensor['max']).'
+           }
+       }
+   });';
+}
+
+?>
+
+});
+</script>
+
+<?php
+}
+?>
+</div></div</div>

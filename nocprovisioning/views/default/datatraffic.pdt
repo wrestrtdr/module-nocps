@@ -1,0 +1,43 @@
+<?php
+/*
+ * NOC-PS Blesta module
+ * Data traffic template
+ *
+ * Copyright (C) Maxnet 2013
+ *
+ * May be distributed under the terms of the LGPL license.
+ * In plain English: feel free to use and modify this file to fit your needs,
+ * however do NOT ioncube encode it.
+ * The source code must be available to anyone you distribute this module to.
+ */
+?>
+
+<div class="inner">
+<div class="heading options space"><h5><?php $this->_('Nocprovisioning.tab_datatraffic.title');?></h5></div>
+<div class="pad">
+<?php
+if ($ports == 0) {
+    echo $this->_('Nocprovisioning.tab_datatraffic.no_info');
+}
+else
+{
+    echo '<div class="heading options"><b>'.$this->_('Nocprovisioning.tab_datatraffic.current_month', true).'</b></div>';
+    
+    foreach ($currentGraphs as $graph)
+    {
+        echo '<p><img width="497" height="249" alt="'.$this->_('Nocprovisioning.tab_datatraffic.current_month', true).'" src="'.$graph.'" /></p>';
+    }
+
+    if (count($lastMonthGraphs))
+    {
+        echo '<div class="heading"><b>'.$this->_('Nocprovisioning.tab_datatraffic.previous_month').'</b></div>';
+
+        foreach ($lastMonthGraphs as $graph)
+        {
+            echo '<p><img width="497" height="249" alt="'.$this->_('Nocprovisioning.tab_datatraffic.previous_month').'" src="'.$graph.'" /></p>';    
+        }
+    }
+}
+?>
+</div>
+</div>

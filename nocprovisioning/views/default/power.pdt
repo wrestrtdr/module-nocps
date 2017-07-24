@@ -1,0 +1,81 @@
+<?php
+/*
+ * NOC-PS Blesta module
+ * Power management template
+ *
+ * Copyright (C) Maxnet 2010-2013
+ *
+ * May be distributed under the terms of the LGPL license.
+ * In plain English: feel free to use and modify this file to fit your needs,
+ * however do NOT ioncube encode it.
+ * The source code must be available to anyone you distribute this module to.
+ */
+?>
+
+<div class="inner">
+<div class="heading options space"><h5><?php $this->_('Nocprovisioning.tab_power.title');?></h5></div>
+<div class="pad">
+<?php if (!empty($errormsg)) { ?>
+<p>
+  <b><?php echo $this->_('Nocprovisioning.error');?>:</b> <?php echo $this->Html->safe($errormsg); ?>
+</p>
+<?php
+} else {
+
+$this->Form->create();
+?>
+  <input type="hidden" name="nps_nonce" value="<?php echo $nonce; ?>" />
+
+  <table width="100%" cellpadding="5" cellspacing="5">
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.ip');?></td>
+            <td><?php echo $this->Html->safe($ip); ?></td>
+          </tr>
+
+		  <?php if ($result) { ?>
+		  <tr>
+			<td width="150"><b><?php $this->_('Nocprovisioning.result_last_action');?></b></td>
+		    <td><font color="green"><?php echo $this->Html->safe($result); ?></font></td>
+		  </tr>
+		  <?php } ?>
+
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_power.status');?></td>
+            <td><?php echo $this->Html->safe($status); ?></td>
+          </tr>
+		  
+<?php if ($ask_ipmi_password) { ?>
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.ipmipassword');?></td>
+            <td><input type="password" name="ipmipassword" style="width: 350px;"></td>
+          </tr>
+<?php } ?>
+          <tr>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_power.action');?></td>
+            <td>
+<?php if ($supportsOn) { ?>
+			  <input type="radio" name="poweraction" value="on"> <?php echo $this->_('Nocprovisioning.tab_power.on');?><br>
+<?php } if ($supportsOff) { ?>
+			  <input type="radio" name="poweraction" value="off"> <?php echo $this->_('Nocprovisioning.tab_power.off');?><br>
+
+<?php } if ($supportsReset) { ?>
+			  <input type="radio" name="poweraction" value="reset" checked="true"> <?php echo $this->_('Nocprovisioning.tab_power.reset');?><br>
+<?php } if ($supportsCycle) { ?>
+			  <input type="radio" name="poweraction" value="cycle" <?php if (!$supportsReset) echo 'checked="true"'; ?>> <?php echo $this->_('Nocprovisioning.tab_power.cycle');?><br>
+<?php } if ($supportsCtrlAltDel) { ?>
+			  <input type="radio" name="poweraction" value="ctrlaltdel" <?php if (!$supportsReset) echo 'checked="true"'; ?>> <?php echo $this->_('Nocprovisioning.tab_power.ctrlaltdel');?><br>
+<?php } ?>
+			</td>
+          </tr>
+
+		  <tr>
+			<td>&nbsp;
+			<td><input type="submit" name="performbutton" value="<?php $this->_('Nocprovisioning.tab_power.perform');?>">
+		  </tr>
+  </table>
+<?php
+
+$this->Form->end();
+} ?>
+</div>
+</div>

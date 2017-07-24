@@ -1,6 +1,6 @@
 <?php
 /**
- * NOC-PS API
+ * NOC-PS API.
  *
  * Author: Floris Bos (Maxnet)
  * bos@je-eigen-domein.nl
@@ -20,19 +20,21 @@ define('NOCPS_DEFAULT_PASSWORD', '');
 define('NOCPS_DEFAULT_SSLVERIFY', false);
 
 /* Check for necessary extensions */
-if ( !extension_loaded('json') )
-    die("Error! JSON extension is missing!");
-if ( !extension_loaded('curl') )
-    die("Error! cURL extension is missing!");
+if (!extension_loaded('json')) {
+    die('Error! JSON extension is missing!');
+}
+if (!extension_loaded('curl')) {
+    die('Error! cURL extension is missing!');
+}
 $curlinfo = curl_version();
-if ( !$curlinfo['features'] & constant('CURL_VERSION_SSL') )
-    die("Error! cURL does not have SSL support! Cowardly refusing insecure communication!");
-
+if (!$curlinfo['features'] & constant('CURL_VERSION_SSL')) {
+    die('Error! cURL does not have SSL support! Cowardly refusing insecure communication!');
+}
 
 class nocps_api extends nocps_JsonRPC_Client
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * Connect to the NOC-PS server
      * @param string $server     Hostname of server (will use default if empty)
@@ -41,25 +43,25 @@ class nocps_api extends nocps_JsonRPC_Client
      * @param bool   $ssl_verify Whether or not to verify the SSL certificate
      * @param string $loguser    Extra info for logging. E.g. username performing the action
      */
-    function __construct($server = NOCPS_DEFAULT_SERVER, $user = NOCPS_DEFAULT_USERNAME,
+    public function __construct($server = NOCPS_DEFAULT_SERVER, $user = NOCPS_DEFAULT_USERNAME,
                          $password = NOCPS_DEFAULT_PASSWORD, $ssl_verify = NOCPS_DEFAULT_SSLVERIFY,
-                         $loguser = "")
+                         $loguser = '')
     {
-        if (!$server)
-            die("Please set the server, username and password in ".__FILE__);
-
-        $headers = array();
-        /* If the API is used in a website, include IP-address of client as header for logging */
-        if (!empty($_SERVER["REMOTE_ADDR"]))
-        {
-            if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"]))
-                $headers["X-Forwarded-For"] = $_SERVER["HTTP_X_FORWARDED_FOR"].", ".$_SERVER['REMOTE_ADDR'];
-            else
-                $headers["X-Forwarded-For"] = $_SERVER['REMOTE_ADDR'];
+        if (!$server) {
+            die('Please set the server, username and password in ' . __FILE__);
         }
-        if ($loguser)
-        {
-            $headers["X-Forwarded-For-User"] = $loguser;
+
+        $headers = [];
+        /* If the API is used in a website, include IP-address of client as header for logging */
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
+            if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $headers['X-Forwarded-For'] = $_SERVER['HTTP_X_FORWARDED_FOR'] . ', ' . $_SERVER['REMOTE_ADDR'];
+            } else {
+                $headers['X-Forwarded-For'] = $_SERVER['REMOTE_ADDR'];
+            }
+        }
+        if ($loguser) {
+            $headers['X-Forwarded-For-User'] = $loguser;
         }
 
         parent::__construct("https://$server/jsonrpc.php", 30, $headers);
@@ -70,7 +72,7 @@ class nocps_api extends nocps_JsonRPC_Client
 }
 
 /**
- * JsonRPC client class
+ * JsonRPC client class.
  *
  * @package JsonRPC
  * @author Frederic Guillot
@@ -79,103 +81,90 @@ class nocps_api extends nocps_JsonRPC_Client
 class nocps_JsonRPC_Client
 {
     /**
-     * URL of the server
+     * URL of the server.
      *
-     * @access private
      * @var string
      */
     private $url;
 
     /**
      * If the only argument passed to a function is an array
-     * assume it contains named arguments
+     * assume it contains named arguments.
      *
-     * @access public
-     * @var boolean
+     * @var bool
      */
     public $named_arguments = true;
 
     /**
-     * HTTP client timeout
+     * HTTP client timeout.
      *
-     * @access private
-     * @var integer
+     * @var int
      */
     private $timeout;
 
     /**
-     * Username for authentication
+     * Username for authentication.
      *
-     * @access private
      * @var string
      */
     private $username;
 
     /**
-     * Password for authentication
+     * Password for authentication.
      *
-     * @access private
      * @var string
      */
     private $password;
 
     /**
-     * True for a batch request
+     * True for a batch request.
      *
-     * @access public
-     * @var boolean
+     * @var bool
      */
     public $is_batch = false;
 
     /**
-     * Batch payload
+     * Batch payload.
      *
-     * @access public
      * @var array
      */
-    public $batch = array();
+    public $batch = [];
 
     /**
-     * Enable debug output to the php error log
+     * Enable debug output to the php error log.
      *
-     * @access public
-     * @var boolean
+     * @var bool
      */
     public $debug = false;
 
     /**
-     * Default HTTP headers to send to the server
+     * Default HTTP headers to send to the server.
      *
-     * @access private
      * @var array
      */
-    private $headers = array(
+    private $headers = [
         'Content-Type: application/json',
         'Accept: application/json'
-    );
+    ];
     /**
-     * SSL certificates verification
-     * @access public
-     * @var boolean
+     * SSL certificates verification.
+     * @var bool
      */
     public $ssl_verify_peer = true;
 
     /**
-     * cURL handle
-     *
-     * @access private
+     * cURL handle.
      */
     private $ch;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @access public
      * @param  string    $url         Server URL
-     * @param  integer   $timeout     Server URL
+     * @param  int   $timeout     Server URL
      * @param  array     $headers     Custom HTTP headers
      */
-    public function __construct($url, $timeout = 5, $headers = array())
+    public function __construct($url, $timeout = 5, $headers = [])
     {
         $this->url = $url;
         $this->timeout = $timeout;
@@ -184,9 +173,7 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Destructor
-     *
-     * @access public
+     * Destructor.
      */
     public function __destruct()
     {
@@ -194,9 +181,8 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Automatic mapping of procedures
+     * Automatic mapping of procedures.
      *
-     * @access public
      * @param  string   $method   Procedure name
      * @param  array    $params   Procedure arguments
      * @return mixed
@@ -212,9 +198,8 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Set authentication parameters
+     * Set authentication parameters.
      *
-     * @access public
      * @param  string   $username   Username
      * @param  string   $password   Password
      */
@@ -225,23 +210,21 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Start a batch request
+     * Start a batch request.
      *
-     * @access public
      * @return Client
      */
     public function batch()
     {
         $this->is_batch = true;
-        $this->batch = array();
+        $this->batch = [];
 
         return $this;
     }
 
     /**
-     * Send a batch request
+     * Send a batch request.
      *
-     * @access public
      * @return array
      */
     public function send()
@@ -254,17 +237,17 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Execute a procedure
+     * Execute a procedure.
      *
-     * @access public
      * @param  string   $procedure   Procedure name
      * @param  array    $params      Procedure arguments
      * @return mixed
      */
-    public function execute($procedure, array $params = array())
+    public function execute($procedure, array $params = [])
     {
         if ($this->is_batch) {
             $this->batch[] = $this->prepareRequest($procedure, $params);
+
             return $this;
         }
 
@@ -274,22 +257,21 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Prepare the payload
+     * Prepare the payload.
      *
-     * @access public
      * @param  string   $procedure   Procedure name
      * @param  array    $params      Procedure arguments
      * @return array
      */
-    public function prepareRequest($procedure, array $params = array())
+    public function prepareRequest($procedure, array $params = [])
     {
-        $payload = array(
+        $payload = [
             'jsonrpc' => '2.0',
             'method' => $procedure,
             'id' => mt_rand()
-        );
+        ];
 
-        if (! empty($params)) {
+        if (!empty($params)) {
             $payload['params'] = $params;
         }
 
@@ -297,17 +279,15 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Parse the response and return the procedure result
+     * Parse the response and return the procedure result.
      *
-     * @access public
      * @param  array     $payload
      * @return mixed
      */
     public function parseResponse(array $payload)
     {
         if ($this->isBatchResponse($payload)) {
-
-            $results = array();
+            $results = [];
 
             foreach ($payload as $response) {
                 $results[] = $this->getResult($response);
@@ -320,11 +300,10 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Return true if we have a batch response
+     * Return true if we have a batch response.
      *
-     * @access public
      * @param  array    $payload
-     * @return boolean
+     * @return bool
      */
     private function isBatchResponse(array $payload)
     {
@@ -332,9 +311,8 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Get a RPC call result
+     * Get a RPC call result.
      *
-     * @access public
      * @param  array    $payload
      * @return mixed
      */
@@ -348,32 +326,31 @@ class nocps_JsonRPC_Client
     }
 
     /**
-     * Throw an exception according the RPC error
+     * Throw an exception according the RPC error.
      *
-     * @access public
-     * @param  integer    $code
+     * @param  int    $code
+     * @param mixed $error
      */
     public function handleRpcErrors($error)
     {
         switch ($error['code']) {
             case -32601:
-                throw new BadFunctionCallException('Procedure not found: '. $error['message']);
+                throw new BadFunctionCallException('Procedure not found: ' . $error['message']);
             case -32602:
-                throw new InvalidArgumentException('Invalid arguments: '. $error['message']);
+                throw new InvalidArgumentException('Invalid arguments: ' . $error['message']);
             default:
-                throw new RuntimeException('Invalid request/response: '. $error['message'], $error['code']);
+                throw new RuntimeException('Invalid request/response: ' . $error['message'], $error['code']);
         }
     }
 
     /**
-     * Do the HTTP request
+     * Do the HTTP request.
      *
-     * @access public
      * @param  string   $payload   Data to send
      */
     public function doRequest($payload)
     {
-        curl_setopt_array($this->ch, array(
+        curl_setopt_array($this->ch, [
             CURLOPT_URL => $this->url,
             CURLOPT_HEADER => false,
             CURLOPT_RETURNTRANSFER => true,
@@ -384,10 +361,10 @@ class nocps_JsonRPC_Client
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_SSL_VERIFYPEER => $this->ssl_verify_peer,
             CURLOPT_POSTFIELDS => json_encode($payload)
-        ));
+        ]);
 
         if ($this->username && $this->password) {
-            curl_setopt($this->ch, CURLOPT_USERPWD, $this->username.':'.$this->password);
+            curl_setopt($this->ch, CURLOPT_USERPWD, $this->username . ':' . $this->password);
         }
 
         $http_body = curl_exec($this->ch);
@@ -403,10 +380,10 @@ class nocps_JsonRPC_Client
         $response = json_decode($http_body, true);
 
         if ($this->debug) {
-            error_log('==> Request: '.PHP_EOL.json_encode($payload, JSON_PRETTY_PRINT));
-            error_log('==> Response: '.PHP_EOL.json_encode($response, JSON_PRETTY_PRINT));
+            error_log('==> Request: ' . PHP_EOL . json_encode($payload, JSON_PRETTY_PRINT));
+            error_log('==> Response: ' . PHP_EOL . json_encode($response, JSON_PRETTY_PRINT));
         }
 
-        return is_array($response) ? $response : array();
+        return is_array($response) ? $response : [];
     }
 }

@@ -11,8 +11,8 @@
  * The source code must be available to anyone you distribute this module to.
  */
 
-    $this->Form->create(null, array('name' => 'prov', 'onsubmit' => 'provbutton.disabled=true; return true;'));
-    
+    $this->Form->create(null, ['name' => 'prov', 'onsubmit' => 'provbutton.disabled=true; return true;']);
+
     if (!empty($ip)) {
         /* Javascript function to fill in the 'disklayout', 'package selection' and 'extra' combos depending on profile */
 ?>
@@ -104,77 +104,79 @@ function array2options(sel, arr)
   }
 }
 </script>
-<?php } ?>
+<?php
+    } ?>
 
 <div class="inner">
-<div class="heading options space"><h5><?php $this->_('Nocprovisioning.tab_provision.title');?></h5></div>
+<div class="heading options space"><h5><?php $this->_('Nocprovisioning.tab_provision.title'); ?></h5></div>
 <div class="pad">
 
 <?php
 if (empty($ip) && empty($errormsg)) {
-    echo $this->_('Nocprovisioning.no_server')."</div></div>";
-}
+        echo $this->_('Nocprovisioning.no_server') . '</div></div>';
+    }
 
 if (!empty($errormsg)) {
-    echo '<p>'.$this->_('Nocprovisioning.error').': '.$errormsg.'</p>';
+    echo '<p>' . $this->_('Nocprovisioning.error') . ': ' . $errormsg . '</p>';
 }
 
 if (!empty($ip)) {
-?>
+    ?>
   <input type="hidden" name="nps_nonce" value="<?php echo $nonce; ?>" />
 
   <table width="100%" cellspacing="10" cellpadding="10">
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.mac');?></td>
-            <td><?php echo $this->Html->safe($mac);?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.mac'); ?></td>
+            <td><?php echo $this->Html->safe($mac); ?></td>
           </tr>
 
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.ip');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.ip'); ?></td>
             <td><?php echo $this->Html->safe($ip); ?></td>
           </tr>
 
-<?php if ($ask_ipmi_password) { ?>
+<?php if ($ask_ipmi_password) {
+        ?>
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.ipmipassword');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.ipmipassword'); ?></td>
             <td><input type="password" name="ipmipassword" style="width: 350px;"></td>
           </tr>
-<?php } ?>
+<?php
+    } ?>
 
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.hostname');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.hostname'); ?></td>
             <td><input type="text" name="hostname" style="width: 350px;" required></td>
           </tr>
 
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.profile');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.profile'); ?></td>
             <td><select name="profile" style="width: 350px;" onchange="onProfileChange();">
 <?php
-    foreach ($profiles as $profile)
-    {
-        echo '<option value="'.$profile['id'].'"';
-        if (!empty($defaultProfile) && $defaultProfile == $profile['id'])
+    foreach ($profiles as $profile) {
+        echo '<option value="' . $profile['id'] . '"';
+        if (!empty($defaultProfile) && $defaultProfile == $profile['id']) {
             echo ' selected';
-        echo '>'.$this->Html->safe($profile['name']).'</option>';
-    }
-?>
+        }
+        echo '>' . $this->Html->safe($profile['name']) . '</option>';
+    } ?>
 			</select></td>
           </tr>
 
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.disk_layout');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.disk_layout'); ?></td>
             <td><select name="disklayout" style="width: 350px;">
 			</select></td>
           </tr>
 
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.package_selection');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.package_selection'); ?></td>
             <td><select name="packageselection" style="width: 350px;">
 			</select></td>
           </tr>
 		  
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.extras');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.extras'); ?></td>
             <td>
 			  <select name="extra1" style="width: 350px;"></select><br><br>
 			  <select name="extra2" style="width: 350px;"></select>
@@ -182,12 +184,12 @@ if (!empty($ip)) {
           </tr>
 		  
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.root_password');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.root_password'); ?></td>
             <td><input type="password" name="rootpassword" id="rootpassword" style="width: 350px;" required></td>
           </tr>
 
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.repeat_root_password');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.repeat_root_password'); ?></td>
             <td><input type="password" name="rootpassword2" id="rootpassword2" onChange="checkPasswordMatch();" style="width: 350px;" required></td>
           </tr>
 
@@ -196,23 +198,23 @@ if (!empty($ip)) {
           </tr>
 
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.admin_username');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.admin_username'); ?></td>
             <td><input type="text" name="adminuser" value="charlie" style="width: 350px;" required></td>
           </tr>
 		  
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.admin_password');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.admin_password'); ?></td>
             <td><input type="password" name="userpassword" id="userpassword" style="width: 350px;" required></td>
           </tr>
 
           <tr>
-            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.repeat_admin_password');?></td>
+            <td width="150"><?php $this->_('Nocprovisioning.tab_provision.repeat_admin_password'); ?></td>
             <td><input type="password" name="userpassword2" id="userpassword2" style="width: 350px;" required></td>
           </tr>
 		  
 		  <tr>
 			<td>&nbsp;
-			<td><input type="submit" name="provbutton" value="<?php echo $this->_('Nocprovisioning.tab_provision.provision_server');?>" onclick="return confirm('<?php echo $this->_('Nocprovisioning.tab_provision.provision_confirm');?>');">
+			<td><input type="submit" name="provbutton" value="<?php echo $this->_('Nocprovisioning.tab_provision.provision_server'); ?>" onclick="return confirm('<?php echo $this->_('Nocprovisioning.tab_provision.provision_confirm'); ?>');">
 		  </tr>
   </table>
 </div></div>

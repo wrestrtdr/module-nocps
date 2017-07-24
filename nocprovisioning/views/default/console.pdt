@@ -14,9 +14,9 @@
 <script type="text/javascript">
     function consolepopup()
     {
-		var n = 'kvm'+'<?php echo (isset($mac) ? $mac : ''); ?>'.replace(/\:/g,'I');
+		var n = 'kvm'+'<?php echo isset($mac) ? $mac : ''; ?>'.replace(/\:/g,'I');
 		var nwin=window.open('about:blank', n,'width=730,height=445');
-		nwin.document.write("<?php $this->_("Nocprovisioning.tab_console.retrieving_info");?>");
+		nwin.document.write("<?php $this->_('Nocprovisioning.tab_console.retrieving_info'); ?>");
         $('#getconsoleurl').val('1');
         $(document).blestaRequest('POST', location.href, $('#consoleform').serialize(),
             function(result) {
@@ -29,75 +29,71 @@
 </script>
 
 <div class="inner">
-<div class="heading options space"><h5><?php $this->_("Nocprovisioning.tab_console.title");?></h5></div>
+<div class="heading options space"><h5><?php $this->_('Nocprovisioning.tab_console.title'); ?></h5></div>
 <div class="pad">
 <?php
 if (!empty($errormsg)) {
-    echo '<p>'; $this->_('Nocprovisioning.error'); echo ': '.$errormsg.'</p>';
-}
-else if (!empty($statusmsg)) {
- echo $statusmsg;
-}
-else
-{
+    echo '<p>';
+    $this->_('Nocprovisioning.error');
+    echo ': ' . $errormsg . '</p>';
+} elseif (!empty($statusmsg)) {
+    echo $statusmsg;
+} else {
+    $opts = ['id' => 'consoleform'];
 
-$opts = array('id' => 'consoleform');
-
-if ($consoletype == 'html5')
-{
-    /* Run VPS console in a new browser window */
+    if ($consoletype == 'html5') {
+        /* Run VPS console in a new browser window */
     $opts['onsubmit'] = 'consolepopup(); return false;';
-}
+    }
 
-$this->Form->create(null, $opts);
-?>
+    $this->Form->create(null, $opts); ?>
     <input type="hidden" name="nps_nonce" value="<?php echo $nonce; ?>">
     <input type="hidden" name="getconsoleurl" value="0" id="getconsoleurl">
     
     <ul>
-<?php if ($powered_off) { ?>
-        <li> <input type="checkbox" name="powerup" checked> <?php $this->_("Nocprovisioning.tab_console.power_on_server");?><br>
+<?php if ($powered_off) {
+        ?>
+        <li> <input type="checkbox" name="powerup" checked> <?php $this->_('Nocprovisioning.tab_console.power_on_server'); ?><br>
 <?php
-} if ($ask_ipmi_password) { ?>
-        <li> <?php $this->_("Nocprovisioning.ipmipassword");?>:
+    }
+    if ($ask_ipmi_password) {
+        ?>
+        <li> <?php $this->_('Nocprovisioning.ipmipassword'); ?>:
         <li> <input type="password" name="ipmipassword"><br>
-<?php } ?>
+<?php
+    } ?>
     </ul>
-    <input type="submit" value="<?php $this->_("Nocprovisioning.tab_console.activate");?>">
+    <input type="submit" value="<?php $this->_('Nocprovisioning.tab_console.activate'); ?>">
 
 <?php
-$this->Form->end();
-?>
+$this->Form->end(); ?>
 <br><br>&nbsp;
 </div>
 <div class="pad">
 <?php
-if ($consoletype == 'html5')
-{
-    echo $this->_("Nocprovisioning.tab_console.info_html5");
-}
-else
-{
-    echo $this->_("Nocprovisioning.tab_console.info_jnlp");    
+if ($consoletype == 'html5') {
+        echo $this->_('Nocprovisioning.tab_console.info_html5');
+    } else {
+        echo $this->_('Nocprovisioning.tab_console.info_jnlp');
 
-    $this->Form->create();
-?> 
+        $this->Form->create(); ?> 
     <input type="hidden" name="nps_nonce" value="<?php echo $nonce; ?>">
     <input type="hidden" name="resetbmc" value="1">
     
     <ul>
 <?php
-if ($ask_ipmi_password) { ?>
-        <li> <?php $this->_("Nocprovisioning.ipmipassword");?>:
+if ($ask_ipmi_password) {
+            ?>
+        <li> <?php $this->_('Nocprovisioning.ipmipassword'); ?>:
         <li> <input type="password" name="ipmipassword"><br>
-<?php } ?>
+<?php
+        } ?>
     </ul>
-    <input type="submit" value="<?php $this->_("Nocprovisioning.tab_console.resetbmc");?>">
+    <input type="submit" value="<?php $this->_('Nocprovisioning.tab_console.resetbmc'); ?>">
 
 <?php
 $this->Form->end();
-
-}
+    }
 }
 ?>
 </div>
